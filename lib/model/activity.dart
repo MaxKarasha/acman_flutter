@@ -1,25 +1,31 @@
 class Activity {
   String id;
-  String title;
-  DateTime startDate;
+  String caption;
+  DateTime start;
+  DateTime end;
+  String userId;
 
-  Activity(this.title, this.startDate);
+  Activity({this.id, this.caption, this.start, this.end, this.userId});
 
-  /*Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {
-      columnValue: value,
-      columnDate: dateTime.millisecondsSinceEpoch,
-      columnComment: comment,
+  Map<String, dynamic> toMap() {
+    return {
+      'id': this.id,
+      'caption': this.caption,
+      'start': this.start,
+      'end': this.end,
+      'userId': this.userId
     };
-    if (id != null) {
-      map[columnId] = id;
-    }
-    return map;
   }
 
-  Expense.fromMap(Map map)
-      : id = map[columnId],
-        value = map[columnValue],
-        dateTime = new DateTime.fromMillisecondsSinceEpoch(map[columnDate]),
-        comment = map[columnComment];*/
+  factory Activity.fromMap(Map<String, dynamic> map) {
+    return Activity(
+      id: map['id'] as String,
+      caption: map['caption'] as String,
+      start: map['start'] as DateTime,
+      end: map['end'] as DateTime,
+      userId: map['userId'] as String
+      //articles: map['articles'].map<Article>((article) => Article.fromMap(article)).toList(),
+    );
+  }
+
 }

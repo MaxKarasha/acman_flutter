@@ -19,8 +19,8 @@ class ActivityRow extends StatelessWidget {
         ),
         child: ListTile(
           onTap: () => _onTap(context, activity),
-          title: Text(activity.title),
-          trailing: Text((new DateFormat('yyyy-MM-dd')).format(activity.startDate)),
+          title: Text(activity.caption),
+          trailing: Text((new DateFormat('yyyy-MM-dd')).format(activity.start)),
         ),
       ),
     );
