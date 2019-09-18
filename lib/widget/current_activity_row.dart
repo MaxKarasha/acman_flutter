@@ -3,12 +3,13 @@ import 'package:acman_app/model/activity.dart';
 import 'package:acman_app/repository/activity_repository.dart';
 import 'package:acman_app/widget/separator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:intl/intl.dart';
 
-class ActivityRow extends StatelessWidget {
+class CurrentActivityRow extends StatelessWidget {
   final Activity activity;
 
-  const ActivityRow(
+  const CurrentActivityRow(
       {Key key, this.activity})
       : super(key: key);
 
@@ -16,44 +17,47 @@ class ActivityRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       //padding: const EdgeInsets.symmetric(vertical: 10.0),
-      padding: EdgeInsets.all(4),
-      child: GestureDetector(
-        onTap: () => _openActivityPage(context, activity),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: SizedBox(
-            height: 100,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Icon(Icons.accessibility_new, size: 70, color: Colors.green),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
-                    child: ActivityDescription(
-                      activity: activity
+        padding: EdgeInsets.all(2),
+        child: GestureDetector(
+          onTap: () => _openActivityPage(context, activity),
+          child: Card(
+            color: Colors.lightGreenAccent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: SizedBox(
+              height: 120,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(12.0, 6.0, 2.0, 2.0),
+                      child: ActivityDescription(
+                          activity: activity
+                      ),
                     ),
                   ),
-                ),
-                Column(
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.play_arrow, size: 38, color: Colors.green),
-                      onPressed: () => _continueActivity(activity),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.stop, size: 38, color: Colors.red),
-                      onPressed: () => _stopActivity(activity),
+                  Padding(
+                    padding: EdgeInsets.only(right: 8),
+                    child: Column(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.pause_circle_outline, size: 42, color: Colors.green),
+                          onPressed: () => _pauseActivity(activity),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.stop, size: 42, color: Colors.red),
+                          onPressed: () => _stopActivity(activity),
+                        )
+                      ],
                     )
-                  ],
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      )
+        )
     );
   }
 
@@ -64,8 +68,8 @@ class ActivityRow extends StatelessWidget {
     );
   }
 
-  void _continueActivity(Activity activity) async {
-    ActivityRepository().continueActivity(activity);
+  void _pauseActivity(Activity activity) async {
+    ActivityRepository().pauseActivity(activity);
   }
 
   void _stopActivity(Activity activity) async {
@@ -95,7 +99,7 @@ class ActivityDescription extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 20,
                 ),
               ),
               const Padding(padding: EdgeInsets.only(bottom: 12.0)),
@@ -104,7 +108,7 @@ class ActivityDescription extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontSize: 12.0,
+                  fontSize: 14.0,
                   color: Colors.black54,
                 ),
               ),

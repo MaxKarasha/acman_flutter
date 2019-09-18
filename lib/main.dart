@@ -54,11 +54,6 @@ class _BottomTabBarExampleState extends State<BottomTabBarExample>
         children: _tabPages,
         controller: _tabController,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Add activity',
-        child: const Icon(Icons.add),
-      ),
       bottomNavigationBar: Material(
         color: Colors.blue,
         child: TabBar(

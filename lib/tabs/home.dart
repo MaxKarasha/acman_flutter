@@ -2,20 +2,13 @@ import 'package:acman_app/card/ActivityPage.dart';
 import 'package:acman_app/model/activity.dart';
 import 'package:acman_app/repository/activity_repository.dart';
 import 'package:acman_app/widget/activity_row.dart';
+import 'package:acman_app/widget/current_activity_row.dart';
 import 'package:acman_app/widget/separator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class HomeTab extends StatelessWidget {
-  List<Activity> activities = new List<Activity>.generate(20, (i) { return Activity(caption: "Activity $i", start: DateTime.now());});
-  //List<Activity> activities2 = await ActivityRepository().getOnPause();
-
-  /*@override
-  void initState() async {
-    activities2 = await ActivityRepository().getOnPause();
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,43 +37,58 @@ class _MainHomePageState extends State<MainHomePage> {
         title: new Text(widget.title),
       ),
       body: Container(
-        child: FutureBuilder(
-          future: ActivityRepository().getOnPause(),
-          builder: (BuildContext context, AsyncSnapshot snapshot){
-            print(snapshot.data);
-            if(snapshot.data == null){
-              return Container(
-                  child: Center(
-                      child: Text("Загрузка...")
-                  )
-              );
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ActivityRow(
-                    activity: snapshot.data[index],
+        child: Column(
+          children: <Widget>[
+            FutureBuilder(
+              future: ActivityRepository().getCurrent(),
+              builder: (BuildContext context, AsyncSnapshot<Activity> snapshot){
+                if(snapshot.data == null){
+                  return Container(
+                      child: Center(
+                          child: Text("Загрузка...")
+                      )
                   );
-                  /*return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          snapshot.data[index].picture
-                      ),
-                    ),
-                    title: Text(snapshot.data[index].caption),
-                    subtitle: Text(new DateFormat('yyyy-MM-dd').format(snapshot.data[index].start)),
-                    onTap: () {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) => ActivityPage(snapshot.data[index]))
-                      );
-                    },
-                  );*/
+                } else {
+                  return CurrentActivityRow(
+                    activity: snapshot.data,
+                  );
+                }
+              },
+            ),
+            //Separator('Незавершенные активности'),
+            Expanded(
+              flex: 4,
+              child: FutureBuilder(
+                future: ActivityRepository().getOnPause(),
+                builder: (BuildContext context, AsyncSnapshot snapshot){
+                  if(snapshot.data == null){
+                    return Container(
+                        child: Center(
+                            child: Text("Загрузка...")
+                        )
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ActivityRow(
+                          activity: snapshot.data[index],
+                        );
+                      },
+                    );
+                  }
                 },
-              );
-            }
-          },
-        ),
+              ),
+            ),
+          ]
+        )
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: null,
+        tooltip: 'Добавить активность',
+        child: const Icon(Icons.add),
+
+      )
     );
   }
 }
