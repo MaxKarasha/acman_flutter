@@ -9,9 +9,8 @@ class BPMAPI implements BaseAPI {
   @override
   Future<String> getOnPause() async {
     try {
-      final response = await get(
-          "http://10.0.2.2:54624/api/Activity/GetOnPause?AcmanKey=$AcmanKey");
-
+      //final response = await get("http://10.0.2.2:54624/api/Activity/GetOnPause?AcmanKey=$AcmanKey");
+      final response = await get("http://www.json-generator.com/api/json/get/bTxpmlhBpe");
       final jsonData = response.body;
       return jsonData;
     } catch (error) {

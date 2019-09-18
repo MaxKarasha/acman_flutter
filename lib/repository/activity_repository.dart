@@ -20,10 +20,11 @@ class ActivityRepositoryBPMApi implements ActivityRepository {
 
   @override
   Future<List<Activity>> getOnPause() async {
+    //List<Activity> activities = new List<Activity>.generate(20, (i) { return Activity(caption: "Activity $i", start: DateTime.now());});
     final jsonData = await _api.getOnPause();
     final jsonResponse = json.decode(jsonData);
-    //Activity activity = new Activity.fromMap(jsonResponse);
-    List<Activity> activities = jsonResponse.map((i) => Activity.fromMap(i)).toList();
+    ////Activity activity = new Activity.fromMap(jsonResponse);
+    List<Activity> activities = jsonResponse.map<Activity>((i) => Activity.fromMap(i)).toList();
     return activities;
   }
 }

@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'tabs/events.dart';
 import 'tabs/home.dart';
 
-class BottomTabbarExample extends StatefulWidget {
-  const BottomTabbarExample({Key key}) : super(key: key);
+void main() => runApp(new MaterialApp(home:Scaffold(body: BottomTabBarExample())));
+
+class BottomTabBarExample extends StatefulWidget {
+  const BottomTabBarExample({Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _BottomTabbarExampleState();
+  State<StatefulWidget> createState() => _BottomTabBarExampleState();
 }
 
-class _BottomTabbarExampleState extends State<BottomTabbarExample>
+class _BottomTabBarExampleState extends State<BottomTabBarExample>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
@@ -23,10 +25,10 @@ class _BottomTabbarExampleState extends State<BottomTabbarExample>
   ];
 
   static const _tabs = <Tab>[
-    Tab(icon: Icon(Icons.group_work), text: 'Main'),
-    Tab(icon: Icon(Icons.event_note), text: 'Schedule'),
-    Tab(icon: Icon(Icons.alarm), text: 'Events'),
-    Tab(icon: Icon(Icons.build), text: 'Settings'),
+    Tab(icon: Icon(Icons.group_work), text: 'Главная'),
+    Tab(icon: Icon(Icons.event_note), text: 'Расписание'),
+    Tab(icon: Icon(Icons.alarm), text: 'События'),
+    Tab(icon: Icon(Icons.build), text: 'Настройки'),
   ];
 
   @override
@@ -52,6 +54,11 @@ class _BottomTabbarExampleState extends State<BottomTabbarExample>
         children: _tabPages,
         controller: _tabController,
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: null,
+        tooltip: 'Add activity',
+        child: const Icon(Icons.add),
+      ),
       bottomNavigationBar: Material(
         color: Colors.blue,
         child: TabBar(
@@ -62,5 +69,3 @@ class _BottomTabbarExampleState extends State<BottomTabbarExample>
     );
   }
 }
-
-void main() => runApp(new MaterialApp(home:Scaffold(body: BottomTabbarExample())));

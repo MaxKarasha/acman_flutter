@@ -21,8 +21,8 @@ class Activity {
     return Activity(
       id: map['id'] as String,
       caption: map['caption'] as String,
-      start: map['start'] as DateTime,
-      end: map['end'] as DateTime,
+      start: DateTime.parse(map['start']),
+      end: DateTime.parse(map['end']),
       userId: map['userId'] as String
       //articles: map['articles'].map<Article>((article) => Article.fromMap(article)).toList(),
     );

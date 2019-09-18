@@ -1,9 +1,11 @@
+import 'package:acman_app/card/ActivityPage.dart';
 import 'package:acman_app/model/activity.dart';
 import 'package:acman_app/repository/activity_repository.dart';
 import 'package:acman_app/widget/activity_row.dart';
 import 'package:acman_app/widget/separator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HomeTab extends StatelessWidget {
   List<Activity> activities = new List<Activity>.generate(20, (i) { return Activity(caption: "Activity $i", start: DateTime.now());});
@@ -18,105 +20,66 @@ class HomeTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: "Home",
-        home: Scaffold(
-          appBar: AppBar(
-              title: Text("Текущие активности")
-          ),
-          body: new Container(
-              padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-              child: new SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Separator("Незавершенные"),
-
-
-                    activityesListWidget(),
-                    /*new Column(
-                      children: activities.map((activity) {
-                        return ActivityRow(
-                          activity: activity,
-                        );
-                      }).toList(),
-                    )*/
-                  ]
-                )
-              )
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: null,
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          )
-        )
+        home: new MainHomePage(title: 'Текущие активности')
+        //home: new Container()
     );
   }
 }
 
-Widget activityesListWidget() {
-  return FutureBuilder(
-    builder: (context, activityInList) {
-      if (activityInList.connectionState == ConnectionState.none &&
-          activityInList.hasData == null) {
-        //print('project snapshot data is: ${projectSnap.data}');
-        return Container();
-      }
-      return ListView.builder(
-        itemCount: activityInList.data.length,
-        itemBuilder: (context, index) {
-          Activity activity = activityInList.data[index];
-          return ActivityRow(
-            activity: activity,
-          );
-        },
-      );
-    },
-    future: ActivityRepository().getOnPause(),
-  );
+class MainHomePage extends StatefulWidget {
+  MainHomePage({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _MainHomePageState createState() => new _MainHomePageState();
 }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: Text('ProjectList'),
-    ),
-    body: activityesListWidget(),
-  );
-}
-
-/*PausedList(
-  items: List<String>.generate(10, (i) => "Item $i"),
-),*/
-class PausedList extends StatelessWidget {
-  final List<String> items;
-
-  PausedList({Key key, @required this.items}) : super(key: key);
+class _MainHomePageState extends State<MainHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final title = 'Long List';
-
-    return MaterialApp(
-      title: title,
-      home: Scaffold(
-          appBar: AppBar(
-            title: Text(title),
-          ),
-          body: ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text('${items[index]}'),
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text(widget.title),
+      ),
+      body: Container(
+        child: FutureBuilder(
+          future: ActivityRepository().getOnPause(),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            print(snapshot.data);
+            if(snapshot.data == null){
+              return Container(
+                  child: Center(
+                      child: Text("Загрузка...")
+                  )
               );
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: null,
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          )
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ActivityRow(
+                    activity: snapshot.data[index],
+                  );
+                  /*return ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          snapshot.data[index].picture
+                      ),
+                    ),
+                    title: Text(snapshot.data[index].caption),
+                    subtitle: Text(new DateFormat('yyyy-MM-dd').format(snapshot.data[index].start)),
+                    onTap: () {
+                      Navigator.push(context,
+                          new MaterialPageRoute(builder: (context) => ActivityPage(snapshot.data[index]))
+                      );
+                    },
+                  );*/
+                },
+              );
+            }
+          },
+        ),
       ),
     );
   }
