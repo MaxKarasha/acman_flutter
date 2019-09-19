@@ -43,12 +43,16 @@ class CurrentActivityRow extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         IconButton(
-                          icon: Icon(Icons.pause_circle_outline, size: 42, color: Colors.green),
-                          onPressed: () => _pauseActivity(activity),
+                          icon: Icon(Icons.pause_circle_outline, color: Colors.green),
+                          splashColor: Colors.green,
+                          iconSize: 42,
+                          onPressed: () => _pauseCurrentActivity(),
                         ),
                         IconButton(
-                          icon: Icon(Icons.stop, size: 42, color: Colors.red),
-                          onPressed: () => _stopActivity(activity),
+                          icon: Icon(Icons.done_all, color: Colors.green),
+                          splashColor: Colors.green,
+                          iconSize: 42,
+                          onPressed: () => _stopCurrentActivity(),
                         )
                       ],
                     )
@@ -68,12 +72,12 @@ class CurrentActivityRow extends StatelessWidget {
     );
   }
 
-  void _pauseActivity(Activity activity) async {
-    ActivityRepository().pauseActivity(activity);
+  void _pauseCurrentActivity() async {
+    ActivityRepository().pauseCurrentActivity();
   }
 
-  void _stopActivity(Activity activity) async {
-    ActivityRepository().stopActivity(activity);
+  void _stopCurrentActivity() async {
+    ActivityRepository().stopCurrentActivity();
   }
 }
 
@@ -103,14 +107,17 @@ class ActivityDescription extends StatelessWidget {
                 ),
               ),
               const Padding(padding: EdgeInsets.only(bottom: 12.0)),
-              Text(
-                'Start date: ' + new DateFormat('yyyy-MM-dd HH:mm').format(activity.start),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+              Visibility(
+                child: Text(
+                  'Start date: ' + new DateFormat('yyyy-MM-dd HH:mm').format(activity.start ?? DateTime.now()),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
                   fontSize: 14.0,
                   color: Colors.black54,
+                  ),
                 ),
+                visible: activity.start != null,
               ),
             ],
           ),

@@ -39,17 +39,21 @@ class _TasksPageState extends State<TasksPage> {
                 children: <Widget>[
                   FutureBuilder(
                     future: ActivityRepository().getCurrent(),
-                    builder: (BuildContext context, AsyncSnapshot<Activity> snapshot){
-                      if(snapshot.data == null){
+                    builder: (BuildContext context, AsyncSnapshot snapshot){
+                      if(snapshot.connectionState != ConnectionState.done){
                         return Container(
                             child: Center(
                                 child: Text("Загрузка...")
                             )
                         );
                       } else {
-                        return CurrentActivityRow(
-                          activity: snapshot.data,
-                        );
+                        if (snapshot.data != null) {
+                          return CurrentActivityRow(
+                            activity: snapshot.data,
+                          );
+                        } else {
+                          return Container();
+                        }
                       }
                     },
                   ),

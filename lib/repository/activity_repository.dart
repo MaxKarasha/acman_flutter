@@ -8,8 +8,9 @@ abstract class ActivityRepository {
   Future<List<Activity>> getOnPause();
   Future<Activity> getCurrent();
   Future<Activity> continueActivity(Activity activity);
-  Future<Activity> pauseActivity(Activity activity);
+  Future<Activity> pauseCurrentActivity();
   Future<Activity> stopActivity(Activity activity);
+  Future<Activity> stopCurrentActivity();
 
   factory ActivityRepository() => ActivityRepositoryBPMApi();
 }
@@ -27,24 +28,37 @@ class ActivityRepositoryBPMApi implements ActivityRepository {
     //List<Activity> activities = new List<Activity>.generate(20, (i) { return Activity(caption: "Activity $i", start: DateTime.now());});
     final jsonData = await _api.getOnPause();
     final jsonResponse = json.decode(jsonData);
-    List<Activity> activities = jsonResponse.map<Activity>((i) => Activity.fromMap(i)).toList();
+    List<Activity> activities = jsonResponse.map<Activity>((i) => Activity.fromJson(i)).toList();
     return activities;
   }
 
   Future<Activity> getCurrent() async {
-    return new Activity(caption: "Завершить проектирование архитектуры Автопланирования", start: DateTime.now());
+    //return new Activity(caption: "Завершить проектирование архитектуры Автопланирования", start: DateTime.now());
+    final jsonData = await _api.getCurrent();
+    return _convertResponseToActivity(jsonData);
   }
 
   Future<Activity> continueActivity(Activity activity) async {
-    final response = await _api.continueActivity(json.encode(activity));
-    return activity;
+    final jsonData = await _api.continueActivity(jsonEncode(activity));
+    return _convertResponseToActivity(jsonData);
   }
 
-  Future<Activity> pauseActivity(Activity activity) async {
-    return activity;
+  Future<Activity> pauseCurrentActivity() async {
+    final jsonData = await _api.pauseCurrentActivity();
+    return _convertResponseToActivity(jsonData);
   }
 
   Future<Activity> stopActivity(Activity activity) async {
-    return activity;
+    final jsonData = await _api.stopActivity(jsonEncode(activity));
+    return _convertResponseToActivity(jsonData);
+  }
+
+  Future<Activity> stopCurrentActivity() async {
+    final jsonData = await _api.stopCurrentActivity();
+    return _convertResponseToActivity(jsonData);
+  }
+
+  Activity _convertResponseToActivity(String data) {
+    return data.isEmpty ? null : Activity.fromJson(json.decode(data));
   }
 }

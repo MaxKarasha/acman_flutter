@@ -40,11 +40,15 @@ class ActivityRow extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     IconButton(
-                      icon: Icon(Icons.play_arrow, size: 38, color: Colors.green),
+                      icon: Icon(Icons.play_arrow, color: Colors.green),
+                      iconSize: 34,
+                      splashColor: Colors.green,
                       onPressed: () => _continueActivity(activity),
                     ),
                     IconButton(
-                      icon: Icon(Icons.stop, size: 38, color: Colors.red),
+                      icon: Icon(Icons.done_all, color: Colors.green),
+                      splashColor: Colors.red,
+                      iconSize: 34,
                       onPressed: () => _stopActivity(activity),
                     )
                   ],
@@ -99,14 +103,17 @@ class ActivityDescription extends StatelessWidget {
                 ),
               ),
               const Padding(padding: EdgeInsets.only(bottom: 12.0)),
-              Text(
-                'Start date: ' + new DateFormat('yyyy-MM-dd HH:mm').format(activity.start),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.black54,
+              Visibility(
+                child: Text(
+                  'Start date: ' + new DateFormat('yyyy-MM-dd HH:mm').format(activity.start ?? DateTime.now()),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.black54,
+                  ),
                 ),
+                visible: activity.start != null,
               ),
             ],
           ),

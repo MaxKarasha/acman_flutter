@@ -5,7 +5,11 @@ import 'package:acman_app/model/activity.dart';
 
 abstract class BaseAPI {
   Future<String> getOnPause();
+  Future<String> getCurrent();
   Future<String> continueActivity(String data);
+  Future<String> pauseCurrentActivity();
+  Future<String> stopActivity(String data);
+  Future<String> stopCurrentActivity();
 
   factory BaseAPI() => BPMAPI();
 }
