@@ -36,6 +36,7 @@ class ActivityRepositoryBPMApi implements ActivityRepository {
   }
 
   Future<Activity> continueActivity(Activity activity) async {
+    final response = await _api.continueActivity(json.encode(activity));
     return activity;
   }
 

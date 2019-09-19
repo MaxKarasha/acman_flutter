@@ -1,5 +1,6 @@
 import 'package:acman_app/tabs/schedule.dart';
 import 'package:acman_app/tabs/settings.dart';
+import 'package:acman_app/tabs/tasks.dart';
 import 'package:flutter/material.dart';
 import 'tabs/events.dart';
 import 'tabs/home.dart';
@@ -19,6 +20,7 @@ class _BottomTabBarExampleState extends State<BottomTabBarExample>
 
   final _tabPages = <Widget>[
     HomeTab(),
+    TasksTab(),
     ScheduleTab(),
     EventsTab(),
     SettingsTab(),
@@ -26,6 +28,7 @@ class _BottomTabBarExampleState extends State<BottomTabBarExample>
 
   static const _tabs = <Tab>[
     Tab(icon: Icon(Icons.group_work), text: 'Главная'),
+    Tab(icon: Icon(Icons.view_list), text: 'Активности'),
     Tab(icon: Icon(Icons.event_note), text: 'Расписание'),
     Tab(icon: Icon(Icons.alarm), text: 'События'),
     Tab(icon: Icon(Icons.build), text: 'Настройки'),
