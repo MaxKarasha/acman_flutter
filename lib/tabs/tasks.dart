@@ -43,7 +43,8 @@ class _TasksPageState extends State<TasksPage> {
                       if(snapshot.connectionState != ConnectionState.done){
                         return Container(
                             child: Center(
-                                child: Text("Загрузка...")
+                                //child: Text("Загрузка...")
+                                child: new LinearProgressIndicator()
                             )
                         );
                       } else {
@@ -66,7 +67,8 @@ class _TasksPageState extends State<TasksPage> {
                         if(snapshot.data == null){
                           return Container(
                               child: Center(
-                                  child: Text("Загрузка...")
+                                  //child: Text("Загрузка...")
+                                  child: new RefreshProgressIndicator()
                               )
                           );
                         } else {
