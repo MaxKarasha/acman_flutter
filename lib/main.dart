@@ -19,7 +19,6 @@ class _BottomTabBarExampleState extends State<BottomTabBarExample>
   TabController _tabController;
 
   final _tabPages = <Widget>[
-    HomeTab(),
     TasksTab(),
     ScheduleTab(),
     EventsTab(),
@@ -27,7 +26,6 @@ class _BottomTabBarExampleState extends State<BottomTabBarExample>
   ];
 
   static const _tabs = <Tab>[
-    Tab(icon: Icon(Icons.group_work), text: 'Главная'),
     Tab(icon: Icon(Icons.view_list), text: 'Активности'),
     Tab(icon: Icon(Icons.event_note), text: 'Расписание'),
     Tab(icon: Icon(Icons.alarm), text: 'События'),
