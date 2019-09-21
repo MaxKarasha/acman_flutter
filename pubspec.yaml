@@ -25,6 +25,7 @@ dependencies:
   uuid:
   worker_manager:
   json_annotation: ^2.4.0
+  flutter_svg: ^0.13.0+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -48,6 +49,38 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - assets/images/running.svg
+    - assets/images/bicycle.svg
+    - assets/images/swim.svg
+    - assets/images/workout.svg
+    - assets/images/donut.svg
+    - assets/images/burger.svg
+    - assets/images/ice_cream.svg
+    - assets/images/pizza.svg
+    - assets/images/cake.svg
+    - assets/images/bottom_donut.svg
+    - assets/images/bottom_burger.svg
+    - assets/images/bottom_ice_cream.svg
+    - assets/images/bottom_pizza.svg
+    - assets/images/bottom_cake.svg
+
+  fonts:
+    - family: Qwigley
+      fonts:
+        - asset: assets/fonts/qwigley/Qwigley-Regular.ttf
+    - family: Dosis
+      fonts:
+        - asset: assets/fonts/dosis/Dosis-Regular.otf
+          weight: 400
+        - asset: assets/fonts/dosis/Dosis-Medium.otf
+          weight: 500
+        - asset: assets/fonts/dosis/Dosis-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/dosis/Dosis-Bold.otf
+          weight: 800
+        - asset: assets/fonts/dosis/Dosis-ExtraBold.otf
+          weight: 900
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg

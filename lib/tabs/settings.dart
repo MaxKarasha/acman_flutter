@@ -1,3 +1,4 @@
+import 'package:acman_app/card/PlanningPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -132,6 +133,18 @@ class _TextFormFieldExampleState extends State<SettingsTab> {
             ),
             maxLength: 8,
             obscureText: true,
+          ),
+          RaisedButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(builder: (context) => PlanningPage())
+              );
+            },
+            child: const Text(
+                'Планирование',
+                style: TextStyle(fontSize: 20)
+            ),
           ),
         ],
       ),
