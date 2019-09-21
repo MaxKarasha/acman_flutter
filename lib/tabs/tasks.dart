@@ -28,6 +28,21 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPageState extends State<TasksPage> {
 
+  Future<Activity> currentActivities;
+  Future<List<Activity>> onPausedActivities;
+  @override
+  void initState() {
+    super.initState();
+    currentActivities = ActivityRepository().getCurrent();
+    onPausedActivities = ActivityRepository().getOnPause();
+  }
+  refreshData() {
+    setState(() {
+      currentActivities = ActivityRepository().getCurrent();
+      onPausedActivities = ActivityRepository().getOnPause();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -38,7 +53,7 @@ class _TasksPageState extends State<TasksPage> {
             child: Column(
                 children: <Widget>[
                   FutureBuilder(
-                    future: ActivityRepository().getCurrent(),
+                    future: currentActivities,
                     builder: (BuildContext context, AsyncSnapshot snapshot){
                       if(snapshot.connectionState != ConnectionState.done){
                         return Container(
@@ -51,6 +66,7 @@ class _TasksPageState extends State<TasksPage> {
                         if (snapshot.data != null) {
                           return CurrentActivityRow(
                             activity: snapshot.data,
+                            notifyParent: refreshData
                           );
                         } else {
                           return Container();
@@ -62,7 +78,7 @@ class _TasksPageState extends State<TasksPage> {
                   Expanded(
                     flex: 4,
                     child: FutureBuilder(
-                      future: ActivityRepository().getOnPause(),
+                      future: onPausedActivities,
                       builder: (BuildContext context, AsyncSnapshot snapshot){
                         if(snapshot.data == null){
                           return Container(
@@ -77,6 +93,7 @@ class _TasksPageState extends State<TasksPage> {
                             itemBuilder: (BuildContext context, int index) {
                               return ActivityRow(
                                 activity: snapshot.data[index],
+                                notifyParent: refreshData
                               );
                             },
                           );

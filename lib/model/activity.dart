@@ -1,9 +1,25 @@
+import 'package:acman_app/core/activitystatusenum_converter.dart';
 import 'package:acman_app/core/datetime_converter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'activity.g.dart';
 
+enum ActivityStatusEnum {
+  New,
+  InPause,
+  InProgress,
+  Done
+}
+
+Map<ActivityStatusEnum, String> ActivityStatusEnumMap  = {
+  ActivityStatusEnum.New: "Не начата",
+  ActivityStatusEnum.InPause: "Пауза",
+  ActivityStatusEnum.InProgress: "В работе",
+  ActivityStatusEnum.Done: "Завершена"
+};
+
 @AcmanDateTimeConverter()
+//@ActivityStatusEnumConverter()
 @JsonSerializable()
 class Activity {
 
@@ -17,7 +33,12 @@ class Activity {
 
   String userId;
 
-  Activity({this.id, this.caption, this.start, this.end, this.userId});
+  @JsonKey(fromJson: _ActivityStatusEnumFromJson, toJson: _ActivityStatusEnumToJson)
+  ActivityStatusEnum status;
+
+  String get statusName => ActivityStatusEnumMap[status];
+
+  Activity({this.id, this.caption, this.start, this.end, this.userId, this.status});
 
   factory Activity.fromJson(Map<String, dynamic> json) => _$ActivityFromJson(json);
   Map<String, dynamic> toJson() => _$ActivityToJson(this);
@@ -44,3 +65,11 @@ class Activity {
   }*/
 
 }
+
+ActivityStatusEnum _ActivityStatusEnumFromJson (dynamic json) {
+  int valueIndex = int.parse(json.toString());
+  return ActivityStatusEnum.values.singleWhere((e) => e.index == valueIndex);
+  //return _enumDecodeNullable(ActivityStatusEnumEnumMap, json);
+}
+
+dynamic _ActivityStatusEnumToJson(ActivityStatusEnum json) => json.index;

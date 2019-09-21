@@ -8,9 +8,10 @@ import 'package:intl/intl.dart';
 
 class CurrentActivityRow extends StatelessWidget {
   final Activity activity;
+  final Function() notifyParent;
 
   const CurrentActivityRow(
-      {Key key, this.activity})
+      {Key key, this.activity, @required this.notifyParent})
       : super(key: key);
 
   @override
@@ -48,11 +49,18 @@ class CurrentActivityRow extends StatelessWidget {
                           iconSize: 42,
                           onPressed: () => _pauseCurrentActivity(),
                         ),
-                        IconButton(
+                        /*IconButton(
                           icon: Icon(Icons.done_all, color: Colors.green),
                           splashColor: Colors.green,
                           iconSize: 42,
                           onPressed: () => _stopCurrentActivity(),
+                        )*/
+                        RaisedButton.icon(
+                            onPressed: () => _stopCurrentActivity(),
+                            icon: Icon(Icons.done, color: Colors.green),
+                            label: Text('Done'),
+                            shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                            color: Colors.orange,
                         )
                       ],
                     )
@@ -73,11 +81,13 @@ class CurrentActivityRow extends StatelessWidget {
   }
 
   void _pauseCurrentActivity() async {
-    ActivityRepository().pauseCurrentActivity();
+    await ActivityRepository().pauseCurrentActivity();
+    notifyParent();
   }
 
   void _stopCurrentActivity() async {
-    ActivityRepository().stopCurrentActivity();
+    await ActivityRepository().stopCurrentActivity();
+    notifyParent();
   }
 }
 
@@ -107,9 +117,18 @@ class ActivityDescription extends StatelessWidget {
                 ),
               ),
               const Padding(padding: EdgeInsets.only(bottom: 12.0)),
+              Text(
+                "Статус: " + activity.statusName,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.black54,
+                ),
+              ),
               Visibility(
                 child: Text(
-                  'Start date: ' + new DateFormat('yyyy-MM-dd HH:mm').format(activity.start ?? DateTime.now()),
+                  'Начало: ' + new DateFormat('yyyy-MM-dd HH:mm').format(activity.start ?? DateTime.now()),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
