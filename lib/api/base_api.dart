@@ -10,6 +10,7 @@ abstract class BaseAPI {
   Future<String> pauseCurrentActivity();
   Future<String> stopActivity(String data);
   Future<String> stopCurrentActivity();
+  Future<void> syncMe();
 
   factory BaseAPI() => BPMAPI();
 }

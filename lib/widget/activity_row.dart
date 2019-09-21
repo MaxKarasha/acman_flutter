@@ -49,7 +49,7 @@ class ActivityRowState extends State<ActivityRow> with TickerProviderStateMixin 
   Widget build(BuildContext context) {
     return Padding(
       //padding: const EdgeInsets.symmetric(vertical: 10.0),
-        padding: EdgeInsets.all(4),
+        padding: EdgeInsets.only(left: 4, right: 4, top: 4),
         child: GestureDetector(
           onDoubleTap: () => _openActivityPage(context, widget.activity),
           onHorizontalDragUpdate: _move,
@@ -58,51 +58,48 @@ class ActivityRowState extends State<ActivityRow> with TickerProviderStateMixin 
             children: <Widget>[
               new Positioned.fill(
                 child: Padding(
-                  padding: new EdgeInsets.only(right: 16.0),
+                  padding: new EdgeInsets.only(right: 6.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       new Container(
                           decoration: new BoxDecoration(
-                            color: Colors.green,
-                            border: new Border(
-                              top: new BorderSide(style: BorderStyle.solid, color: Colors.black12),
-                              bottom: new BorderSide(style: BorderStyle.solid, color: Colors.black12),
+                            gradient: new LinearGradient(
+                              colors: [Colors.green, Colors.lightGreenAccent],
                             ),
                           ),
                           child: new IconButton(
-                            padding: new EdgeInsets.only(top: 16.0, bottom: 16.0, left: 24.0, right: 24.0),
+                            padding: new EdgeInsets.only(top: 18.0, bottom: 18.0, left: 22.0, right: 22.0),
                             onPressed: () => _continueActivity(widget.activity),
                             icon: Icon(Icons.play_arrow),
+                            iconSize: 28,
                             color: new Color(0xFFFFFFFF),
                           )
                       ),
                       new Container(
                           decoration: new BoxDecoration(
-                            color: Colors.amber,
-                            border: new Border(
-                              top: new BorderSide(style: BorderStyle.solid, color: const Color(0xFFE57373)),
-                              bottom: new BorderSide(style: BorderStyle.solid, color: const Color(0xFFE57373)),
+                            gradient: new LinearGradient(
+                              colors: [Colors.amber, Colors.yellow],
                             ),
                           ),
                           child: new IconButton(
-                            padding: new EdgeInsets.only(top: 16.0, bottom: 16.0, left: 24.0, right: 24.0),
+                            padding: new EdgeInsets.only(top: 18.0, bottom: 18.0, left: 22.0, right: 22.0),
                             icon: new Icon(Icons.done),
+                            iconSize: 28,
                             color: new Color(0xFFFFFFFF),
                             onPressed: () {},
                           )
                       ),
                       new Container(
                           decoration: new BoxDecoration(
-                            color: Colors.black54,
-                            border: new Border(
-                              top: new BorderSide(style: BorderStyle.solid, color: Colors.black12),
-                              bottom: new BorderSide(style: BorderStyle.solid, color: Colors.black12),
+                            gradient: new LinearGradient(
+                              colors: [Colors.red, Colors.deepOrangeAccent],
                             ),
                           ),
                           child: new IconButton(
-                            padding: new EdgeInsets.only(top: 16.0, bottom: 16.0, left: 24.0, right: 24.0),
+                            padding: new EdgeInsets.only(top: 18.0, bottom: 18.0, left: 22.0, right: 22.0),
                             icon: new Icon(Icons.edit),
+                            iconSize: 28,
                             color: new Color(0xFFFFFFFF),
                             onPressed: () {},
                           )
@@ -246,7 +243,7 @@ class ActivityDescription extends StatelessWidget {
                 "Статус: " + activity.statusName,
                 style: const TextStyle(
                   fontSize: 14.0,
-                  color: Colors.black54,
+                  color: Colors.black87,
                   fontWeight: FontWeight.bold
                 ),
                 textAlign: TextAlign.center,
@@ -258,7 +255,7 @@ class ActivityDescription extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 12.0,
-                    color: Colors.black54,
+                    color: Colors.black87,
                   ),
                 ),
                 visible: activity.start != null,

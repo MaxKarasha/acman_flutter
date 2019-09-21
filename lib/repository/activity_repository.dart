@@ -11,6 +11,7 @@ abstract class ActivityRepository {
   Future<Activity> pauseCurrentActivity();
   Future<Activity> stopActivity(Activity activity);
   Future<Activity> stopCurrentActivity();
+  Future<void> syncMe();
 
   factory ActivityRepository() => ActivityRepositoryBPMApi();
 }
@@ -54,6 +55,11 @@ class ActivityRepositoryBPMApi implements ActivityRepository {
   }
 
   Future<Activity> stopCurrentActivity() async {
+    final jsonData = await _api.stopCurrentActivity();
+    return _convertResponseToActivity(jsonData);
+  }
+
+  Future<void> syncMe() async {
     final jsonData = await _api.stopCurrentActivity();
     return _convertResponseToActivity(jsonData);
   }

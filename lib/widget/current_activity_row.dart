@@ -1,9 +1,7 @@
 import 'package:acman_app/card/ActivityPage.dart';
 import 'package:acman_app/model/activity.dart';
 import 'package:acman_app/repository/activity_repository.dart';
-import 'package:acman_app/widget/separator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:intl/intl.dart';
 
 class CurrentActivityRow extends StatelessWidget {
@@ -54,7 +52,7 @@ class CurrentActivityRow extends StatelessWidget {
                         child: Column(
                           children: <Widget>[
                             IconButton(
-                              icon: Icon(Icons.pause_circle_outline, color: Colors.green),
+                              icon: Icon(Icons.pause_circle_outline, color: Colors.white70),
                               splashColor: Colors.green,
                               iconSize: 42,
                               onPressed: () => _pauseCurrentActivity(),
@@ -67,10 +65,13 @@ class CurrentActivityRow extends StatelessWidget {
                         )*/
                             RaisedButton.icon(
                               onPressed: () => _stopCurrentActivity(),
-                              icon: Icon(Icons.done, color: Colors.green),
-                              label: Text('Done'),
+                              icon: Icon(Icons.done, color: Colors.white),
+                              label: Text('Done', style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.white
+                              )),
                               shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                              color: Colors.orange,
+                              color: Colors.white30,
                             )
                           ],
                         )

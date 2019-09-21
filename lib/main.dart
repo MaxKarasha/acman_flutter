@@ -1,67 +1,74 @@
+import 'package:acman_app/tabs/events.dart';
 import 'package:acman_app/tabs/schedule.dart';
-import 'package:acman_app/tabs/settings.dart';
 import 'package:acman_app/tabs/tasks.dart';
+import 'package:acman_app/widget/app_bar_acman.dart';
+
+import 'tabs/settings.dart';
+import 'widget/fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
-import 'tabs/events.dart';
-import 'tabs/home.dart';
 
-void main() => runApp(new MaterialApp(home:Scaffold(body: BottomTabBarExample())));
+void main() => runApp(MyApp());
 
-class BottomTabBarExample extends StatefulWidget {
-  const BottomTabBarExample({Key key}) : super(key: key);
-
+class MyApp extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() => _BottomTabBarExampleState();
-}
-
-class _BottomTabBarExampleState extends State<BottomTabBarExample>
-    with SingleTickerProviderStateMixin {
-  TabController _tabController;
-
-  final _tabPages = <Widget>[
-    TasksTab(),
-    ScheduleTab(),
-    EventsTab(),
-    SettingsTab(),
-  ];
-
-  static const _tabs = <Tab>[
-    Tab(icon: Icon(Icons.view_list), text: 'Активности'),
-    Tab(icon: Icon(Icons.event_note), text: 'Расписание'),
-    Tab(icon: Icon(Icons.alarm), text: 'События'),
-    Tab(icon: Icon(Icons.build), text: 'Настройки'),
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(
-      length: _tabPages.length,
-      vsync: this,
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primaryColor: Colors.blue,
+      ),
+      home: MyHomePage(),
     );
   }
+}
 
+class MyHomePage extends StatefulWidget {
   @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int currentPage = 0;
+
+  GlobalKey bottomNavigationKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null,
-      body: TabBarView(
-        children: _tabPages,
-        controller: _tabController,
-      ),
-      bottomNavigationBar: Material(
-        color: Colors.blue,
-        child: TabBar(
-          tabs: _tabs,
-          controller: _tabController,
+      /*appBar: AcmanAppBar(
+        height: 100,
+      ),*/
+      body: Container(
+        //decoration: BoxDecoration(color: Colors.black),
+        child: Center(
+          child: _getPage(currentPage),
         ),
       ),
+      bottomNavigationBar: FancyBottomNavigation(
+        tabs: [
+          TabData(iconData: Icons.view_list, title: "Активности"),
+          TabData(iconData: Icons.event_note, title: "Расписание"),
+          TabData(iconData: Icons.alarm, title: "События"),
+          TabData(iconData: Icons.build, title: "Настройки")
+        ],
+        initialSelection: 1,
+        key: bottomNavigationKey,
+        onTabChangedListener: (position) {
+          setState(() {
+            currentPage = position;
+          });
+        },
+      )
     );
+  }
+
+  _getPage(int page) {
+    switch (page) {
+      case 0: return TasksTab();
+      case 1: return ScheduleTab();
+      case 2: return EventsTab();
+      default: SettingsTab();
+    }
   }
 }

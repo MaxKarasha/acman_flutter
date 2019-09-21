@@ -12,7 +12,7 @@ class TasksTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: "Home",
+        title: "Активности",
         home: new TasksPage(title: 'Текущие активности')
       //home: new Container()
     );
@@ -52,18 +52,20 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin  {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = Theme.of(context).cardColor;
-    Color foregroundColor = Theme.of(context).accentColor;
-    List<AddListItem> items = [
-      new AddListItem(
-        text: "Консультацыя",
-        color: Colors.greenAccent
-      ),
-      AddListItem(color: Colors.yellow, text: "Кофе")
-    ];
     return new Scaffold(
-        appBar: new AppBar(
-          title: new Text(widget.title),
+        appBar: AppBar(
+            title: Text("Acman tasks"),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(15),
+              ),
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.refresh, color: Colors.white),
+                onPressed: () {_syncMe();},
+              ),
+            ]
         ),
         body: Container(
             child: Column(
@@ -138,7 +140,7 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin  {
         onClose: () => print('DIAL CLOSED'),
         tooltip: 'Speed Dial',
         heroTag: 'speed-dial-hero-tag',
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         elevation: 8.0,
         shape: CircleBorder(),
@@ -167,6 +169,11 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin  {
         ],
       ),
     );
+  }
+
+  void _syncMe() async {
+    await ActivityRepository().syncMe();
+    refreshData();
   }
 }
 

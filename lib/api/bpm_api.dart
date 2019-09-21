@@ -39,6 +39,10 @@ class BPMAPI implements BaseAPI {
     return _basePost("CurrentActivity", "Stop", "");
   }
 
+  Future<void> syncMe() async {
+    return _basePost("Synchronization", "SyncMe", "");
+  }
+
   Future<String> _basePost(String controllerName, String methodName, String data) async {
     try {
       final response = await post(AcmanUri + "/api/$controllerName/$methodName?AcmanKey=$AcmanKey",
