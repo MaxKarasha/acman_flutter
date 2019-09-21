@@ -4,55 +4,54 @@ import 'package:acman_app/widget/page.dart';
 import 'package:acman_app/widget/pager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+// Import the library.
+import 'package:signalr_client/signalr_client.dart';
+
+
+// The location of the SignalR Server.
+final serverUrl = "192.168.10.50:51001";
+// Creates the connection by using the HubConnectionBuilder.
+final hubConnection = HubConnectionBuilder().withUrl(serverUrl).build();
+
 
 class PlanningPage extends StatelessWidget {
   PlanningPage();
 
   @override
   Widget build(BuildContext context) {
-//    return Scaffold(
-//        appBar: AppBar(
-//          title: Text("Планирование"),
-//        ),
-//      body: Container(
-//        child: MenuPager(
-//          children: Aliments.aliments
-//              .map(
-//                (aliment) => Page(
-//              title: "HOW TO BURN OFF",
-//              background: aliment.background,
-//              icon: aliment.bottomImage,
-//              child: CardItem(
-//                child: AlimentWidget(
-//                  aliment: aliment,
-//                  theme: aliment.background,
-//                ),
-//              ),
-//            ),
-//          )
-//              .toList(),
-//        ),
-//      ),
-//    );
-  return Container(
-    child: MenuPager(
-      children: Aliments.aliments
-          .map(
-            (aliment) => Page(
-          title: "Планирование",
-          background: aliment.background,
-          icon: aliment.bottomImage,
-          child: CardItem(
-            child: AlimentWidget(
-              aliment: aliment,
-              theme: aliment.background,
-            ),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Планирование"),
+        ),
+      body: Container(
+        child: RaisedButton(
+          onPressed: null,
+          child: const Text(
+              'ping',
+              style: TextStyle(fontSize: 20)
           ),
         ),
-      )
-          .toList(),
-    ),
-  );
+      ),
+    );
+//  return Container(
+//    child: MenuPager(
+//      children: Aliments.aliments
+//          .map(
+//            (aliment) => Page(
+//          title: "Планирование",
+//          background: aliment.background,
+//          icon: aliment.bottomImage,
+//          child: CardItem(
+//            child: AlimentWidget(
+//              aliment: aliment,
+//              theme: aliment.background,
+//            ),
+//          ),
+//        ),
+//      )
+//          .toList(),
+//    ),
+//  );
   }
 }
 class Aliments {

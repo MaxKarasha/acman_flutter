@@ -6,7 +6,7 @@ import 'package:acman_app/api/base_api.dart';
 import 'package:http/http.dart';
 
 const AcmanKey = 'TestMKKey';
-const AcmanUri = 'http://192.168.31.189:45455';
+const AcmanUri = 'https://acman-server-ff5.conveyor.cloud';
 
 class BPMAPI implements BaseAPI {
   @override

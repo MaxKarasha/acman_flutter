@@ -33,6 +33,8 @@ class Activity {
 
   String userId;
 
+  String sourceIcon;
+
   @JsonKey(fromJson: _ActivityStatusEnumFromJson, toJson: _ActivityStatusEnumToJson)
   ActivityStatusEnum status;
 

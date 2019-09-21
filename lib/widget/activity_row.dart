@@ -3,76 +3,184 @@ import 'package:acman_app/model/activity.dart';
 import 'package:acman_app/repository/activity_repository.dart';
 import 'package:acman_app/widget/separator.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as prefix0;
 
-class ActivityRow extends StatelessWidget {
-  final Activity activity;
-  final Function() notifyParent;
+class ActivityRowState extends State<ActivityRow> with TickerProviderStateMixin {
+  AnimationController _controller;
+  Animation<double> _animation;
 
-  const ActivityRow(
-      {Key key, this.activity, @required this.notifyParent})
-      : super(key: key);
+  void initState() {
+    super.initState();
+    _controller = new AnimationController(duration:
+    const Duration(milliseconds: 246), vsync: this);
+
+    _animation = new CurvedAnimation(
+      parent: _controller,
+      curve: new Interval(0.0, 1.0, curve: Curves.linear),
+    );
+  }
+
+  void _move(DragUpdateDetails details) {
+    final double delta = details.primaryDelta / 304;
+    switch (Directionality.of(context)) {
+      case TextDirection.rtl:
+        _controller.value += delta;
+        break;
+      case TextDirection.ltr:
+        _controller.value -= delta;
+        break;
+    }
+  }
+
+  void _handleDragEnd(DragEndDetails details) {
+    bool _isFlingGesture = -details.velocity.pixelsPerSecond.dx > 600;
+
+    if (_isFlingGesture) {
+      final double flingVelocity = details.velocity.pixelsPerSecond.dx;
+      _controller.fling(velocity: flingVelocity.abs() * 0.003333);
+    } else if (_controller.value < 0.4) {
+      _controller.reverse();
+    } else {
+      _controller.forward();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       //padding: const EdgeInsets.symmetric(vertical: 10.0),
-      padding: EdgeInsets.all(4),
-      child: GestureDetector(
-        onTap: () => _openActivityPage(context, activity),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: SizedBox(
-            height: 100,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Icon(Icons.arrow_forward_ios, size: 70, color: Colors.green),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
-                    child: ActivityDescription(
-                      activity: activity
+        padding: EdgeInsets.all(4),
+        child: GestureDetector(
+          onDoubleTap: () => _openActivityPage(context, widget.activity),
+          onHorizontalDragUpdate: _move,
+          onHorizontalDragEnd: _handleDragEnd,
+          child: new Stack(
+            children: <Widget>[
+              new Positioned.fill(
+                child: Padding(
+                  padding: new EdgeInsets.only(right: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      new Container(
+                          decoration: new BoxDecoration(
+                            color: Colors.green,
+                            border: new Border(
+                              top: new BorderSide(style: BorderStyle.solid, color: Colors.black12),
+                              bottom: new BorderSide(style: BorderStyle.solid, color: Colors.black12),
+                            ),
+                          ),
+                          child: new IconButton(
+                            padding: new EdgeInsets.only(top: 16.0, bottom: 16.0, left: 24.0, right: 24.0),
+                            onPressed: () => _continueActivity(widget.activity),
+                            icon: Icon(Icons.play_arrow),
+                            color: new Color(0xFFFFFFFF),
+                          )
+                      ),
+                      new Container(
+                          decoration: new BoxDecoration(
+                            color: Colors.amber,
+                            border: new Border(
+                              top: new BorderSide(style: BorderStyle.solid, color: const Color(0xFFE57373)),
+                              bottom: new BorderSide(style: BorderStyle.solid, color: const Color(0xFFE57373)),
+                            ),
+                          ),
+                          child: new IconButton(
+                            padding: new EdgeInsets.only(top: 16.0, bottom: 16.0, left: 24.0, right: 24.0),
+                            icon: new Icon(Icons.done),
+                            color: new Color(0xFFFFFFFF),
+                            onPressed: () {},
+                          )
+                      ),
+                      new Container(
+                          decoration: new BoxDecoration(
+                            color: Colors.black54,
+                            border: new Border(
+                              top: new BorderSide(style: BorderStyle.solid, color: Colors.black12),
+                              bottom: new BorderSide(style: BorderStyle.solid, color: Colors.black12),
+                            ),
+                          ),
+                          child: new IconButton(
+                            padding: new EdgeInsets.only(top: 16.0, bottom: 16.0, left: 24.0, right: 24.0),
+                            icon: new Icon(Icons.edit),
+                            color: new Color(0xFFFFFFFF),
+                            onPressed: () {},
+                          )
+                      ),
+                    ],
+                  ),
+                )
+              ),
+              SlideTransition(
+                position: new Tween<Offset>(
+                  begin:  Offset.zero,
+                  end: const Offset(-0.565, 0.0), //controls the opening of the slice
+                ).animate(_animation),
+                child: Container(
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)
+                    ),
+                    child: SizedBox(
+                        height: 100,
+                        child: new Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: new NetworkImage(
+                                    'https://i.pinimg.com/564x/5c/cd/75/5ccd7544f3908ca293f66e9b186015df.jpg',
+                                  ),
+                                  fit: BoxFit.cover
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(10))
+                          ),
+                          child: Row(
+
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              new Center(
+                                  child: new Padding(
+                                    padding: new EdgeInsets.only(left: 10.0),
+                                    child: new Container(
+                                      child: Image.network(
+                                        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/1200px-Telegram_2019_Logo.svg.png",
+                                        height: 60,
+                                        width: 60,
+                                      ),
+                                      decoration:BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle
+                                      ) ,
+                                    ),
+                                  )
+                              ),
+
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
+                                  child: ActivityDescription(
+                                      activity: widget.activity
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                     ),
                   ),
+                  decoration: new BoxDecoration(
+                      boxShadow: [
+                        new BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 30.0
+                        )
+                      ]
+                  ),
                 ),
-                Column(
-                  children: <Widget>[
-                    /*IconButton(
-                      icon: Icon(Icons.play_arrow, color: Colors.green),
-                      iconSize: 34,
-                      splashColor: Colors.green,
-                      onPressed: () => _continueActivity(activity),
-                    ),*/
-                    RaisedButton.icon(
-                      onPressed: () => _continueActivity(activity),
-                      icon: Icon(Icons.play_arrow, color: Colors.green),
-                      label: Text('Start'),
-                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                      color: Colors.yellow,
-                    ),
-                    /*IconButton(
-                      icon: Icon(Icons.done_all, color: Colors.green),
-                      splashColor: Colors.red,
-                      iconSize: 34,
-                      onPressed: () => _stopActivity(activity),
-                    )*/
-                    RaisedButton.icon(
-                      onPressed: () => _stopActivity(activity),
-                      icon: Icon(Icons.done, color: Colors.green),
-                      label: Text('Done'),
-                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                      color: Colors.lightGreenAccent,
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
-      )
+              ),
+            ],
+          )
+
+        )
     );
   }
 
@@ -85,13 +193,27 @@ class ActivityRow extends StatelessWidget {
 
   void _continueActivity(Activity activity) async {
     await ActivityRepository().continueActivity(activity);
-    notifyParent();
+    widget.notifyParent();
   }
 
   void _stopActivity(Activity activity) async {
     await ActivityRepository().stopActivity(activity);
-    notifyParent();
+    widget.notifyParent();
   }
+}
+
+class ActivityRow extends StatefulWidget {
+  final Activity activity;
+  final Function() notifyParent;
+
+  @override
+  ActivityRowState createState() => ActivityRowState();
+
+  const ActivityRow(
+      {Key key, this.activity, @required this.notifyParent})
+      : super(key: key);
+
+
 }
 
 class ActivityDescription extends StatelessWidget {
@@ -131,7 +253,7 @@ class ActivityDescription extends StatelessWidget {
               ),
               Visibility(
                 child: Text(
-                  'Начало: ' + new DateFormat('yyyy-MM-dd HH:mm').format(activity.start ?? DateTime.now()),
+                  'Начало: ' + new prefix0.DateFormat('yyyy-MM-dd HH:mm').format(activity.start ?? DateTime.now()),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -148,3 +270,4 @@ class ActivityDescription extends StatelessWidget {
     );
   }
 }
+
