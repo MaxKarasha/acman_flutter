@@ -7,9 +7,10 @@ import 'package:intl/intl.dart';
 
 class ActivityRow extends StatelessWidget {
   final Activity activity;
+  final Function() notifyParent;
 
   const ActivityRow(
-      {Key key, this.activity})
+      {Key key, this.activity, @required this.notifyParent})
       : super(key: key);
 
   @override
@@ -28,7 +29,7 @@ class ActivityRow extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Icon(Icons.accessibility_new, size: 70, color: Colors.green),
+                Icon(Icons.arrow_forward_ios, size: 70, color: Colors.green),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
@@ -39,17 +40,31 @@ class ActivityRow extends StatelessWidget {
                 ),
                 Column(
                   children: <Widget>[
-                    IconButton(
+                    /*IconButton(
                       icon: Icon(Icons.play_arrow, color: Colors.green),
                       iconSize: 34,
                       splashColor: Colors.green,
                       onPressed: () => _continueActivity(activity),
+                    ),*/
+                    RaisedButton.icon(
+                      onPressed: () => _continueActivity(activity),
+                      icon: Icon(Icons.play_arrow, color: Colors.green),
+                      label: Text('Start'),
+                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                      color: Colors.yellow,
                     ),
-                    IconButton(
+                    /*IconButton(
                       icon: Icon(Icons.done_all, color: Colors.green),
                       splashColor: Colors.red,
                       iconSize: 34,
                       onPressed: () => _stopActivity(activity),
+                    )*/
+                    RaisedButton.icon(
+                      onPressed: () => _stopActivity(activity),
+                      icon: Icon(Icons.done, color: Colors.green),
+                      label: Text('Done'),
+                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                      color: Colors.lightGreenAccent,
                     )
                   ],
                 )
@@ -69,11 +84,13 @@ class ActivityRow extends StatelessWidget {
   }
 
   void _continueActivity(Activity activity) async {
-    ActivityRepository().continueActivity(activity);
+    await ActivityRepository().continueActivity(activity);
+    notifyParent();
   }
 
   void _stopActivity(Activity activity) async {
-    ActivityRepository().stopActivity(activity);
+    await ActivityRepository().stopActivity(activity);
+    notifyParent();
   }
 }
 
@@ -103,9 +120,18 @@ class ActivityDescription extends StatelessWidget {
                 ),
               ),
               const Padding(padding: EdgeInsets.only(bottom: 12.0)),
+              Text(
+                "Статус: " + activity.statusName,
+                style: const TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold
+                ),
+                textAlign: TextAlign.center,
+              ),
               Visibility(
                 child: Text(
-                  'Start date: ' + new DateFormat('yyyy-MM-dd HH:mm').format(activity.start ?? DateTime.now()),
+                  'Начало: ' + new DateFormat('yyyy-MM-dd HH:mm').format(activity.start ?? DateTime.now()),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
