@@ -12,6 +12,7 @@ abstract class ActivityRepository {
   Future<Activity> pauseCurrentActivity();
   Future<Activity> stopActivity(Activity activity);
   Future<Activity> addActivity(String caption, String source);
+  Future<Activity> addActivityItem(Activity activity);
   Future<Activity> stopCurrentActivity();
   Future<void> syncMe();
 
@@ -53,6 +54,11 @@ class ActivityRepositoryBPMApi implements ActivityRepository {
 
   Future<Activity> addActivity(String caption, String source) async {
     final jsonData = await _api.addActivity(caption, source);
+    return _convertResponseToActivity(jsonData);
+  }
+
+  Future<Activity> addActivityItem(Activity activity) async {
+    final jsonData = await _api.addActivityItem(activity);
     return _convertResponseToActivity(jsonData);
   }
 

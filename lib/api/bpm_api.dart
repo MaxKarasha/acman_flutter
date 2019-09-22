@@ -34,7 +34,7 @@ class BPMAPI implements BaseAPI {
 
   @override
   Future<String> addActivity(String caption, String source) async {
-    final data = jsonEncode(Activity(
+    return addActivityItem(Activity(
         id: uuid.v1(),
         caption: caption,
         userId: "9A5A2215-B83F-4CB5-7351-08D5E1011293",
@@ -42,7 +42,10 @@ class BPMAPI implements BaseAPI {
         end: null,
         status: ActivityStatusEnum.InProgress,
         source: source
-    ).toJson());
+    ));
+  }
+  Future<String> addActivityItem(Activity activity) async {
+    final data = jsonEncode(activity.toJson());
     await _basePost("Activity", "Add", data);
     return data;
   }
@@ -57,7 +60,7 @@ class BPMAPI implements BaseAPI {
   }
 
   Future<void> syncMe() async {
-    return _basePost("Synchronization", "SyncMe", "");
+    return await _basePost("Synchronization", "SyncMe", "");
   }
 
   Future<String> _basePost(String controllerName, String methodName, String data) async {

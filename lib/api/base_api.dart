@@ -9,6 +9,7 @@ abstract class BaseAPI {
   Future<String> continueActivity(String data);
   Future<String> pauseCurrentActivity();
   Future<String> addActivity(String caption, String source);
+  Future<String> addActivityItem(Activity activity);
   Future<String> stopActivity(String data);
   Future<String> stopCurrentActivity();
   Future<void> syncMe();

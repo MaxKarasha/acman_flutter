@@ -70,7 +70,10 @@ class ActivityRowState extends State<ActivityRow> with TickerProviderStateMixin 
                           ),
                           child: new IconButton(
                             padding: new EdgeInsets.only(top: 18.0, bottom: 18.0, left: 22.0, right: 22.0),
-                            onPressed: () => _continueActivity(widget.activity),
+                            onPressed: () {
+                              _controller.value = 0.0;
+                              _continueActivity(widget.activity);
+                              },
                             icon: Icon(Icons.play_arrow),
                             iconSize: 28,
                             color: new Color(0xFFFFFFFF),
@@ -87,7 +90,7 @@ class ActivityRowState extends State<ActivityRow> with TickerProviderStateMixin 
                             icon: new Icon(Icons.done),
                             iconSize: 28,
                             color: new Color(0xFFFFFFFF),
-                            onPressed: () { _stopActivity(widget.activity);},
+                            onPressed: () { _controller.value = 0.0;_stopActivity(widget.activity);},
                           )
                       ),
                       new Container(
@@ -101,7 +104,10 @@ class ActivityRowState extends State<ActivityRow> with TickerProviderStateMixin 
                             icon: new Icon(Icons.edit),
                             iconSize: 28,
                             color: new Color(0xFFFFFFFF),
-                            onPressed: () {_openActivityPage(context, widget.activity);},
+                            onPressed: () {
+                              _controller.value = 0.0;
+                              _openActivityPage(context, widget.activity);
+                            },
                           )
                       ),
                     ],
@@ -229,6 +235,9 @@ class ActivityDescription extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: 10.0),
+              ),
               Text(
                 activity.caption,
                 maxLines: 3,

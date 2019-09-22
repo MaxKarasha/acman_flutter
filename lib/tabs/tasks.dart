@@ -1,3 +1,6 @@
+import 'package:acman_app/api/bpm_api.dart';
+import 'package:acman_app/card/ActivityPage.dart';
+import 'package:acman_app/card/NewActivityPage.dart';
 import 'package:acman_app/model/activity.dart';
 import 'package:acman_app/repository/activity_repository.dart';
 import 'package:acman_app/widget/activity_row.dart';
@@ -29,10 +32,12 @@ class TasksPage extends StatefulWidget {
 }
 
 class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin  {
-
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   Future<Activity> currentActivities;
   Future<List<Activity>> onPausedActivities;
   AnimationController _controller;
+  bool showSpeedDial = true;
   @override
   void initState() {
     super.initState();
@@ -53,6 +58,8 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin  {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+        resizeToAvoidBottomPadding: false,
+        key: scaffoldKey,
         appBar: AppBar(
             title: Text("Acman tasks"),
             shape: RoundedRectangleBorder(
@@ -95,34 +102,40 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin  {
                   //Separator('Незавершенные активности'),
                   Expanded(
                     flex: 4,
-                    child: FutureBuilder(
-                      future: onPausedActivities,
-                      builder: (BuildContext context, AsyncSnapshot snapshot){
-                        if(snapshot.data == null){
-                          return Container(
-                              child: Center(
-                                  //child: Text("Загрузка...")
-                                  child: new RefreshProgressIndicator()
-                              )
-                          );
-                        } else {
-                          return ListView.builder(
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ActivityRow(
-                                activity: snapshot.data[index],
-                                notifyParent: refreshData
+                    child: new RefreshIndicator(
+                        key: _refreshIndicatorKey,
+                        child: FutureBuilder(
+                          future: onPausedActivities,
+                          builder: (BuildContext context, AsyncSnapshot snapshot){
+                            if(snapshot.data == null){
+                              return Container(
+                                  child: Center(
+                                    //child: Text("Загрузка...")
+                                      child: new RefreshProgressIndicator()
+                                  )
                               );
-                            },
-                          );
-                        }
-                      },
-                    ),
+                            } else {
+                              return ListView.builder(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ActivityRow(
+                                      activity: snapshot.data[index],
+                                      notifyParent: refreshData
+                                  );
+                                },
+                              );
+                            }
+                          },
+                        ),
+                        onRefresh: () {
+                            refreshData();
+                            return currentActivities;
+                        })
                   ),
                 ]
             )
         ),
-      floatingActionButton: SpeedDial(
+      floatingActionButton: this.showSpeedDial ? SpeedDial(
         marginRight: 18,
         marginBottom: 20,
         animatedIcon: AnimatedIcons.add_event,
@@ -166,11 +179,68 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin  {
             labelStyle: TextStyle(fontSize: 18.0),
               onTap: () => ActivityRepository().addActivity("Обед", "lunch")
           ),
+          SpeedDialChild(
+            child: Icon(FontAwesomeIcons.plus),
+            backgroundColor: Colors.green,
+            label: 'Другое',
+            labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () {
+//                bottomSheetController.closed.then((value) {
+//                  showFoatingActionButton(true);
+//                });
+                var newActivity = new Activity(
+                    id: uuid.v1(),
+                    caption: "",
+                    userId: "9A5A2215-B83F-4CB5-7351-08D5E1011293",
+                    start: DateTime.now(),
+                    status: ActivityStatusEnum.InProgress,
+                    source: "phone"
+                );
+                var scheetController = scaffoldKey.currentState.showBottomSheet((context) => Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 10, color: Colors.grey[300], spreadRadius: 5)
+                        ]),
+                    height: 250,
+                    child: ListView(
+                      children: <Widget>[
+                        ListTile(
+                            title: MyActivityForm(
+                                activity: newActivity
+                            )
+                        ),
+                        ListTile(
+                          title: MaterialButton(
+                            color: Colors.grey[800],
+                            onPressed: () {
+                              ActivityRepository().addActivityItem(newActivity);
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'Создать',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )
+                        )
+                      ],
+                    )
+                ));
+                showSpeedDialButton(false);
+                scheetController.closed.then((val) => showSpeedDialButton(true));
+              }
+          ),
         ],
-      ),
+      ) : Container(),
     );
   }
-
+  void showSpeedDialButton(bool val) {
+    setState(() {
+      showSpeedDial = val;
+    });
+  }
   void _syncMe() async {
     await ActivityRepository().syncMe();
     refreshData();
