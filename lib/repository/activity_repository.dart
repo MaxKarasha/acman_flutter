@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:async' as prefix0;
 import 'dart:convert';
 
 import 'package:acman_app/api/base_api.dart';
@@ -10,6 +11,7 @@ abstract class ActivityRepository {
   Future<Activity> continueActivity(Activity activity);
   Future<Activity> pauseCurrentActivity();
   Future<Activity> stopActivity(Activity activity);
+  Future<Activity> addActivity(String caption, String source);
   Future<Activity> stopCurrentActivity();
   Future<void> syncMe();
 
@@ -46,6 +48,11 @@ class ActivityRepositoryBPMApi implements ActivityRepository {
 
   Future<Activity> pauseCurrentActivity() async {
     final jsonData = await _api.pauseCurrentActivity();
+    return _convertResponseToActivity(jsonData);
+  }
+
+  Future<Activity> addActivity(String caption, String source) async {
+    final jsonData = await _api.addActivity(caption, source);
     return _convertResponseToActivity(jsonData);
   }
 

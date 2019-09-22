@@ -29,7 +29,7 @@ class CurrentActivityRow extends StatelessWidget {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: new NetworkImage(
-                          'https://i.pinimg.com/564x/88/3e/32/883e32d1d69a51cc0579e0ce0e82301f.jpg',
+                          'https://i.pinimg.com/564x/19/33/3e/19333ed2c51f655ff0aac5fa365cb51a.jpg',
                         ),
                         fit: BoxFit.cover
                     ),

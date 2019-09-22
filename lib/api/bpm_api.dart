@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:acman_app/api/base_api.dart';
+import 'package:acman_app/model/activity.dart';
 import 'package:http/http.dart';
+import 'package:uuid/uuid.dart';
 
 const AcmanKey = 'TestMKKey';
 const AcmanUri = 'https://acman-server-ff5.conveyor.cloud';
+var uuid = new Uuid();
 
 class BPMAPI implements BaseAPI {
   @override
@@ -29,6 +32,20 @@ class BPMAPI implements BaseAPI {
     return _basePost("Activity", "Continue", data);
   }
 
+  @override
+  Future<String> addActivity(String caption, String source) async {
+    final data = jsonEncode(Activity(
+        id: uuid.v1(),
+        caption: caption,
+        userId: "9A5A2215-B83F-4CB5-7351-08D5E1011293",
+        start: DateTime.now(),
+        end: null,
+        status: ActivityStatusEnum.InProgress,
+        source: source
+    ).toJson());
+    await _basePost("Activity", "Add", data);
+    return data;
+  }
   @override
   Future<String> stopActivity(String data) async {
     return _basePost("Activity", "Stop", data);

@@ -87,7 +87,7 @@ class ActivityRowState extends State<ActivityRow> with TickerProviderStateMixin 
                             icon: new Icon(Icons.done),
                             iconSize: 28,
                             color: new Color(0xFFFFFFFF),
-                            onPressed: () {},
+                            onPressed: () { _stopActivity(widget.activity);},
                           )
                       ),
                       new Container(
@@ -101,7 +101,7 @@ class ActivityRowState extends State<ActivityRow> with TickerProviderStateMixin 
                             icon: new Icon(Icons.edit),
                             iconSize: 28,
                             color: new Color(0xFFFFFFFF),
-                            onPressed: () {},
+                            onPressed: () {_openActivityPage(context, widget.activity);},
                           )
                       ),
                     ],
@@ -124,7 +124,7 @@ class ActivityRowState extends State<ActivityRow> with TickerProviderStateMixin 
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   image: new NetworkImage(
-                                    'https://i.pinimg.com/564x/5c/cd/75/5ccd7544f3908ca293f66e9b186015df.jpg',
+                                      widget.activity.backgroundIconUrl
                                   ),
                                   fit: BoxFit.cover
                               ),
@@ -139,7 +139,7 @@ class ActivityRowState extends State<ActivityRow> with TickerProviderStateMixin 
                                     padding: new EdgeInsets.only(left: 10.0),
                                     child: new Container(
                                       child: Image.network(
-                                        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/1200px-Telegram_2019_Logo.svg.png",
+                                        widget.activity.sourceIconUrl,
                                         height: 60,
                                         width: 60,
                                       ),

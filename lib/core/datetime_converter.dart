@@ -5,7 +5,7 @@ class AcmanDateTimeConverter implements JsonConverter<DateTime, String> {
 
   @override
   DateTime fromJson(String json) {
-    if (json == null) return null;
+    if (json == null || json == "") return null;
     if (json.contains(".")) {
       //json = json.substring(0, json.length - 1);
       json = json.substring(0, json.indexOf('.'));

@@ -33,14 +33,21 @@ class Activity {
 
   String userId;
 
+  String source;
+
   String sourceIcon;
 
+  String backgroundIcon;
   @JsonKey(fromJson: _ActivityStatusEnumFromJson, toJson: _ActivityStatusEnumToJson)
   ActivityStatusEnum status;
 
   String get statusName => ActivityStatusEnumMap[status];
 
-  Activity({this.id, this.caption, this.start, this.end, this.userId, this.status});
+  String get sourceIconUrl => sourceIcon ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/1200px-Telegram_2019_Logo.svg.png";
+
+  String get backgroundIconUrl => backgroundIcon == null || backgroundIcon == "" ? "https://i.pinimg.com/564x/5c/cd/75/5ccd7544f3908ca293f66e9b186015df.jpg" : backgroundIcon;
+
+  Activity({this.id, this.caption, this.start, this.end, this.userId, this.status, this.source, this.sourceIcon, this.backgroundIcon});
 
   factory Activity.fromJson(Map<String, dynamic> json) => _$ActivityFromJson(json);
   Map<String, dynamic> toJson() => _$ActivityToJson(this);

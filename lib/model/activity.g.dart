@@ -14,6 +14,9 @@ Activity _$ActivityFromJson(Map<String, dynamic> json) {
     end: const AcmanDateTimeConverter().fromJson(json['end'] as String),
     userId: json['userId'] as String,
     status: _ActivityStatusEnumFromJson(json['status']),
+    source: json["source"],
+    sourceIcon: json["sourceIcon"],
+    backgroundIcon: json["backgroundIcon"]
   );
 }
 
@@ -24,4 +27,5 @@ Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
       'end': const AcmanDateTimeConverter().toJson(instance.end),
       'userId': instance.userId,
       'status': _ActivityStatusEnumToJson(instance.status),
+      'source': instance.source
     };

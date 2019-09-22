@@ -150,21 +150,21 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin  {
               backgroundColor: Colors.red,
               label: 'Консультация',
               labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => print('FIRST CHILD')
+              onTap: () => ActivityRepository().addActivity("Консультация", "help")
           ),
           SpeedDialChild(
             child: Icon(FontAwesomeIcons.coffee),
             backgroundColor: Colors.blue,
             label: 'Кофе',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => print('SECOND CHILD'),
+              onTap: () => ActivityRepository().addActivity("Кофе", "coffee")
           ),
           SpeedDialChild(
             child: Icon(FontAwesomeIcons.utensils),
             backgroundColor: Colors.green,
             label: 'Обед',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => print('THIRD CHILD'),
+              onTap: () => ActivityRepository().addActivity("Обед", "lunch")
           ),
         ],
       ),
